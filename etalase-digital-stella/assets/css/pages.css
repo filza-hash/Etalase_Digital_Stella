@@ -1,0 +1,286 @@
+/* pages.css - gaya khusus halaman (hero etalase, kartu karya, form, login/register) */
+
+/* ================= HERO ETALASE ================= */
+.hero{
+  --mx:70%;--my:30%;
+  position:relative;overflow:hidden;isolation:isolate;
+  border-radius:var(--r-xl);padding:clamp(1.8rem,4.5vw,3.2rem);
+  color:#fff;background:linear-gradient(135deg,var(--night) 0%,var(--night-2) 60%,#E32636 100%);
+  box-shadow:0 24px 50px rgba(120,25,20,.28);
+}
+/* bidang bintang */
+.hero::before{
+  content:"";position:absolute;inset:0;z-index:-2;opacity:.9;
+  background-image:
+    radial-gradient(1.4px 1.4px at 12% 22%,#fff,transparent),
+    radial-gradient(1px 1px at 28% 68%,#fff,transparent),
+    radial-gradient(1.6px 1.6px at 44% 14%,#fff,transparent),
+    radial-gradient(1px 1px at 58% 80%,#fff,transparent),
+    radial-gradient(1.2px 1.2px at 71% 36%,#fff,transparent),
+    radial-gradient(1px 1px at 86% 70%,#fff,transparent),
+    radial-gradient(1.4px 1.4px at 93% 16%,#fff,transparent),
+    radial-gradient(1px 1px at 6% 84%,#fff,transparent),
+    radial-gradient(1px 1px at 36% 42%,#fff,transparent);
+  animation:twinkle 5s ease-in-out infinite alternate;
+}
+/* cahaya yang mengikuti kursor */
+.hero::after{
+  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(420px circle at var(--mx) var(--my),rgba(255,255,255,.22),rgba(255,255,255,.08) 38%,transparent 70%);
+  transition:background .08s linear;
+}
+@keyframes twinkle{from{opacity:.45}to{opacity:1}}
+
+.hero-copy{position:relative;max-width:560px}
+.hero h1{font-size:clamp(2.1rem,5vw,3.5rem);margin:0 0 .7rem;color:#fff;line-height:1.05;letter-spacing:-.035em}
+.hero p.lead{color:#FFE3E5;font-size:1.05rem;max-width:46ch;margin-bottom:1.6rem}
+
+.hero-search{display:flex;gap:.4rem;max-width:520px;padding:.35rem;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);transition:background .25s,box-shadow .25s,border-color .25s}
+.hero-search:focus-within{background:rgba(255,255,255,.2);border-color:rgba(255,255,255,.5);box-shadow:0 0 0 5px rgba(255,255,255,.2)}
+.hero-search>svg{align-self:center;margin-left:.9rem;width:18px;height:18px;color:#FFE3E5;flex:none}
+.hero-search input{flex:1;min-width:0;border:0;background:transparent;color:#fff;padding:.65rem .7rem;box-shadow:none;border-radius:999px}
+.hero-search input::placeholder{color:#FFC9CE}
+.hero-search input:focus{box-shadow:none}
+.hero-search .btn{border-radius:999px;background:#fff;border-color:#fff;color:var(--primary-600);padding:.6rem 1.3rem}
+.hero-search .btn:hover{background:#fff1ef;border-color:#fff1ef;color:var(--primary-600)}
+
+/* rasi bintang (digambar saat halaman dimuat) */
+.constellation{position:absolute;right:clamp(1rem,5vw,4rem);top:50%;transform:translateY(-50%);width:min(340px,38%);height:auto;z-index:-1;pointer-events:none}
+.constellation path{fill:none;stroke:rgba(255,255,255,.35);stroke-width:1.2;stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.6s var(--ease) forwards}
+.constellation path:nth-of-type(2){animation-delay:.35s}
+.constellation path:nth-of-type(3){animation-delay:.7s}
+.constellation path:nth-of-type(4){animation-delay:1.05s}
+.constellation circle{fill:#fff;opacity:0;animation:star-in .5s ease forwards,star-pulse 3.2s ease-in-out infinite}
+.constellation circle.big{fill:#fff;filter:drop-shadow(0 0 6px rgba(255,255,255,.8))}
+.constellation circle:nth-of-type(1){animation-delay:.1s,2s}
+.constellation circle:nth-of-type(2){animation-delay:.5s,2.4s}
+.constellation circle:nth-of-type(3){animation-delay:.9s,1.8s}
+.constellation circle:nth-of-type(4){animation-delay:1.3s,2.8s}
+.constellation circle:nth-of-type(5){animation-delay:1.7s,2.2s}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes star-in{to{opacity:1}}
+@keyframes star-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.5)}}
+.constellation circle{transform-box:fill-box;transform-origin:center}
+@media (max-width:760px){.constellation{opacity:.35;width:60%;right:-10%}}
+
+/* ================= KARTU KARYA ================= */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1.4rem}
+.project{position:relative;padding:0;overflow:hidden;display:flex;flex-direction:column;border-radius:var(--r-lg);transition:transform .35s var(--ease),box-shadow .35s var(--ease),border-color .3s}
+.project:hover{transform:translateY(-6px);box-shadow:var(--shadow-2);border-color:#F3CDD1}
+.thumb{position:relative;display:block;width:100%;aspect-ratio:16/10;overflow:hidden;background:linear-gradient(110deg,#F3F4F6 30%,#FFF6F6 50%,#F3F4F6 70%);background-size:200% 100%;animation:shimmer 1.4s linear infinite;cursor:pointer}
+.thumb.is-loaded{animation:none;background:#F3F4F6}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:opacity .5s ease,transform .7s var(--ease)}
+html.js .thumb:not(.is-loaded) img{opacity:0}
+.project:hover .thumb img{transform:scale(1.07)}
+.thumb::after{
+  content:"Lihat detail";position:absolute;left:50%;bottom:.9rem;transform:translate(-50%,12px);
+  padding:.4rem .9rem;border-radius:999px;background:rgba(32,33,36,.78);color:#fff;font-size:.78rem;font-weight:700;
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);opacity:0;transition:opacity .3s,transform .35s var(--ease);white-space:nowrap;
+}
+.project:hover .thumb::after,.thumb:focus-visible::after{opacity:1;transform:translate(-50%,0)}
+.project .body{padding:1.1rem 1.2rem 1.25rem;display:flex;flex-direction:column;flex:1}
+.project h3{font-size:1.12rem;margin:0 0 .6rem}
+.project h3 a{color:var(--ink)}
+.project h3 a::after{content:"";position:absolute;inset:0;z-index:1}   /* seluruh kartu bisa diklik */
+.project:hover h3 a{color:var(--primary)}
+.project h3 a:focus-visible{outline:none}
+.project h3 a:focus-visible::after{outline:3px solid rgba(227,38,54,.5);outline-offset:-3px;border-radius:var(--r-lg)}
+.owner{display:flex;align-items:center;gap:.5rem;margin:0 0 .7rem;font-size:.82rem;color:var(--muted)}
+.owner strong{color:var(--ink);font-weight:700}
+.owner time{margin-left:auto;white-space:nowrap}
+.project .desc{color:#4B5563;font-size:.9rem;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.project .actions{position:relative;z-index:2;padding-top:1.1rem}
+@keyframes shimmer{to{background-position:-200% 0}}
+
+/* kemunculan kartu (hanya jika JS aktif) */
+html.js .reveal{opacity:0;transform:translateY(22px) scale(.98)}
+html.js .reveal.is-in{opacity:1;transform:none;transition:opacity .6s ease var(--d,0ms),transform .7s var(--ease) var(--d,0ms),box-shadow .35s var(--ease),border-color .3s}
+html.js .reveal.is-in:hover{transform:translateY(-6px);transition-delay:0ms}
+
+html.js-failed .reveal{opacity:1;transform:none}
+html.js-failed .thumb img{opacity:1!important}
+
+/* penyaringan instan */
+.project.is-hidden{display:none}
+.no-result{display:none}
+.no-result.is-show{display:block;animation:pop .4s var(--ease)}
+
+/* ================= FORM KARYA / USER ================= */
+.form-card{max-width:620px;margin:1rem auto;padding:clamp(1.4rem,3vw,2.2rem);border-radius:var(--r-xl)}
+.form-card h1{margin-bottom:.2rem}
+.form-card .sub{color:var(--muted);margin-bottom:.4rem}
+.form-card .actions{padding-top:1.6rem}
+.preview{width:100%;max-height:220px;object-fit:cover;border-radius:var(--r-md);margin-bottom:.7rem;border:1px solid var(--line)}
+
+/* ================= LOGIN / REGISTER ================= */
+body.auth-body{background:var(--paper)}
+.auth-shell{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);min-height:100vh}
+.auth-aside{
+  position:relative;overflow:hidden;isolation:isolate;color:#fff;padding:clamp(2rem,5vw,4rem);
+  display:flex;flex-direction:column;justify-content:space-between;
+  background:linear-gradient(150deg,var(--night),var(--night-2) 65%,#E32636);
+}
+.auth-aside::before{content:"";position:absolute;inset:0;z-index:-1;animation:twinkle 5s ease-in-out infinite alternate;
+  background-image:
+    radial-gradient(1.4px 1.4px at 10% 18%,#fff,transparent),radial-gradient(1px 1px at 24% 62%,#fff,transparent),
+    radial-gradient(1.6px 1.6px at 42% 10%,#fff,transparent),radial-gradient(1px 1px at 55% 78%,#fff,transparent),
+    radial-gradient(1.2px 1.2px at 72% 30%,#fff,transparent),radial-gradient(1px 1px at 88% 66%,#fff,transparent),
+    radial-gradient(1.4px 1.4px at 92% 12%,#fff,transparent),radial-gradient(1px 1px at 8% 88%,#fff,transparent),
+    radial-gradient(1px 1px at 64% 92%,#fff,transparent),radial-gradient(1.2px 1.2px at 34% 40%,#fff,transparent)}
+.auth-aside .brand{color:#fff}
+.auth-aside h2{font-size:clamp(1.9rem,3.6vw,2.8rem);letter-spacing:-.035em;line-height:1.08;max-width:14ch;margin-bottom:.9rem}
+.auth-aside p{color:#FFE3E5;max-width:38ch}
+.auth-aside .constellation{position:relative;right:auto;top:auto;transform:none;width:min(300px,70%);margin:0 0 1.5rem;z-index:0}
+.auth-main{display:grid;place-items:center;padding:clamp(1.5rem,4vw,3rem)}
+.auth{width:100%;max-width:410px;animation:rise .7s var(--ease) both}
+.auth h1{font-size:1.9rem;margin-bottom:.3rem}
+.auth .sub{color:var(--muted);margin-bottom:.8rem}
+.auth .muted{margin-top:1.4rem;text-align:center}
+.auth details{margin-top:1.2rem;padding:.8rem 1rem;border:1px dashed #F5B5BB;border-radius:var(--r-md);background:var(--primary-50);font-size:.85rem;color:var(--muted)}
+.auth details summary{cursor:pointer;font-weight:700;color:var(--primary-600)}
+.auth details[open] summary{margin-bottom:.5rem}
+@keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+@media (max-width:860px){
+  .auth-shell{grid-template-columns:1fr}
+  .auth-aside{padding:1.4rem 1.4rem 1.8rem;gap:1.2rem}
+  .auth-aside h2{font-size:1.6rem;max-width:none}
+  .auth-aside .constellation{display:none}
+  .auth-aside p{display:none}
+}
+
+/* ================= DETAIL KARYA ================= */
+.detail{max-width:980px;margin:0 auto}
+.back{display:inline-flex;align-items:center;gap:.4rem;margin-bottom:1rem;padding:.4rem .9rem .4rem .6rem;border-radius:999px;font-weight:700;font-size:.9rem;color:var(--muted);transition:color .2s,background .2s}
+.back svg{width:16px;height:16px;transition:transform .25s var(--ease)}
+.back:hover{color:var(--primary);background:var(--primary-50)}
+.back:hover svg{transform:translateX(-4px)}
+
+.detail-media{position:relative;isolation:isolate;overflow:hidden;display:grid;place-items:center;border-radius:var(--r-xl);padding:clamp(1rem,3.5vw,2.4rem);background:var(--night);box-shadow:0 24px 50px rgba(120,25,20,.25);animation:pop .7s var(--ease) both}
+.detail-media::before{content:"";position:absolute;inset:-40px;z-index:-2;background-image:var(--bg);background-size:cover;background-position:center;filter:blur(30px) saturate(1.4);transform:scale(1.15)}
+.detail-media::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(32,33,36,.30),rgba(32,33,36,.60))}
+.detail-img{display:block;padding:0;border:0;background:none;cursor:zoom-in;border-radius:var(--r-md);overflow:hidden;box-shadow:0 22px 54px rgba(32,33,36,.5);transition:transform .5s var(--ease)}
+.detail-img:hover{transform:scale(1.02)}
+.detail-img img{display:block;max-width:100%;max-height:520px;width:auto;height:auto}
+.detail-hint{position:absolute;right:1rem;bottom:.8rem;padding:.25rem .7rem;border-radius:999px;background:rgba(32,33,36,.55);color:#FFE3E5;font-size:.74rem;font-weight:600;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+
+.detail-body{margin-top:1.4rem;padding:clamp(1.4rem,3.2vw,2.4rem);border-radius:var(--r-xl);animation:rise .7s var(--ease) .12s both}
+.detail-body h1{font-size:clamp(1.7rem,3.8vw,2.7rem);letter-spacing:-.035em;line-height:1.1;margin:0 0 1.3rem}
+.meta{display:flex;flex-wrap:wrap;gap:.9rem 2rem;padding-bottom:1.4rem;margin-bottom:1.4rem;border-bottom:1px solid var(--line)}
+.meta-item{display:flex;align-items:center;gap:.7rem}
+.meta-item .avatar{width:40px;height:40px;font-size:.85rem}
+.meta-ic{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--primary-50);color:var(--primary)}
+.meta-ic svg{width:18px;height:18px}
+.meta-item .lbl{display:block;font-size:.78rem;color:var(--muted);line-height:1.2}
+.meta-item .val{display:block;font-weight:700;line-height:1.35}
+.detail-body h2{font-size:1.05rem;margin-bottom:.6rem}
+.detail-desc{color:#4B5563;font-size:1.02rem;line-height:1.8;max-width:72ch}
+.detail-body .actions{margin-top:0;padding-top:1.8rem}
+@media (max-width:600px){.detail-hint{display:none}}
+
+/* ================= UNGGULAN, KATEGORI, KARTU ================= */
+.ribbon{position:absolute;left:.8rem;top:.8rem;z-index:2;display:inline-flex;align-items:center;gap:.3rem;padding:.26rem .7rem;border-radius:999px;background:var(--primary);color:#fff;font-size:.72rem;font-weight:800;box-shadow:0 6px 14px rgba(227,38,54,.4)}
+.ribbon svg{width:12px;height:12px}
+.ribbon-lg{left:1rem;top:1rem;font-size:.8rem;padding:.35rem .85rem}
+.star-form{position:absolute;right:.7rem;top:.7rem;z-index:3;margin:0}
+.star-btn{width:34px;height:34px;display:grid;place-items:center;padding:0;border:0;border-radius:50%;background:rgba(255,255,255,.94);color:var(--muted);cursor:pointer;box-shadow:var(--shadow-1);transition:transform .25s var(--ease),color .2s,background .2s}
+.star-btn svg{width:17px;height:17px}
+.star-btn:hover{transform:scale(1.14) rotate(14deg);color:var(--primary)}
+.star-btn.is-on{background:var(--primary);color:#fff}
+.owner-who{position:relative;z-index:2;display:inline-flex;align-items:center;gap:.5rem;color:var(--muted)}
+.owner-who:hover{color:var(--muted)}
+.owner-who:hover strong{color:var(--primary)}
+
+.unggulan{margin-top:2.2rem}
+.unggulan .section-head{margin-top:0}
+.unggulan h2{display:flex;align-items:center;gap:.5rem}
+.unggulan h2 svg{width:22px;height:22px;color:var(--primary)}
+.grid-featured{grid-template-columns:repeat(auto-fill,minmax(320px,1fr))}
+.grid-featured .thumb{aspect-ratio:16/9}
+.project.is-unggulan{border-color:#F3CDD1;box-shadow:0 0 0 3px rgba(227,38,54,.07),var(--shadow-1)}
+
+.chips{display:flex;flex-wrap:wrap;gap:.5rem;margin:1.5rem 0 0}
+.chip-link{display:inline-flex;align-items:center;gap:.45rem;padding:.45rem .6rem .45rem .95rem;border-radius:999px;background:#fff;border:1px solid var(--line);color:var(--muted);font-weight:700;font-size:.85rem;transition:transform .2s var(--ease),background .2s,border-color .2s,color .2s}
+.chip-link span{min-width:22px;text-align:center;padding:0 .4rem;border-radius:999px;background:#F3F4F6;color:var(--muted);font-size:.72rem;line-height:1.6}
+.chip-link:hover{background:var(--primary-50);border-color:#F3CDD1;color:var(--primary);transform:translateY(-1px)}
+.chip-link.is-active{background:var(--primary);border-color:var(--primary);color:#fff;box-shadow:0 6px 14px rgba(227,38,54,.28)}
+.chip-link.is-active span{background:rgba(255,255,255,.25);color:#fff}
+
+/* detail: chip + meta yang bisa diklik */
+.detail-body>.chip{margin-bottom:.8rem}
+.meta-link{color:var(--ink);border-radius:12px;transition:background .2s}
+.meta-link:hover{color:var(--ink)}
+.meta-link:hover .val{color:var(--primary)}
+.detail-body .actions{gap:.6rem}
+.detail-body .like-form{margin-left:0}
+.detail-body .actions>.like.is-own{margin-left:0}
+
+/* ================= PROFIL ================= */
+.profile{padding:0;overflow:hidden;border-radius:var(--r-xl);animation:pop .6s var(--ease) both}
+.profile-cover{position:relative;height:128px;background:linear-gradient(135deg,var(--night),var(--primary))}
+.profile-cover::before{content:"";position:absolute;inset:0;opacity:.8;background-image:radial-gradient(1.4px 1.4px at 12% 30%,#fff,transparent),radial-gradient(1px 1px at 30% 70%,#fff,transparent),radial-gradient(1.4px 1.4px at 52% 24%,#fff,transparent),radial-gradient(1px 1px at 70% 64%,#fff,transparent),radial-gradient(1.4px 1.4px at 88% 34%,#fff,transparent);animation:twinkle 5s ease-in-out infinite alternate}
+.profile-main{display:flex;gap:1.3rem;align-items:flex-start;padding:0 clamp(1.2rem,3vw,2rem) 1.5rem}
+.avatar-xl{width:104px;height:104px;margin-top:-52px;font-size:2.1rem;border:5px solid #fff;box-shadow:var(--shadow-2);flex:none}
+.profile-info{flex:1;min-width:0;padding-top:.9rem}
+.profile-info h1{font-size:clamp(1.5rem,3vw,2rem);margin:0 0 .5rem;letter-spacing:-.03em}
+.profile-tags{display:flex;align-items:center;flex-wrap:wrap;gap:.5rem;margin-bottom:.8rem}
+.profile-tags .chip{margin:0}
+.profile-bio{max-width:64ch;color:#4B5563;line-height:1.7;margin-bottom:1rem}
+.profile-links{display:flex;gap:.5rem;flex-wrap:wrap}
+.profile-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));border-top:1px solid var(--line);background:#FCFCFD}
+.pstat{padding:1rem 1.4rem;border-right:1px solid var(--line)}
+.pstat:last-child{border-right:0}
+.pstat strong{display:block;font-size:1.5rem;line-height:1.1;letter-spacing:-.03em}
+.pstat .pstat-text{font-size:1.05rem;padding-top:.3rem}
+.pstat span{color:var(--muted);font-size:.82rem}
+.counter{margin-top:.3rem;text-align:right;color:var(--muted);font-size:.78rem}
+@media (max-width:640px){
+  .profile-main{flex-direction:column;gap:0}
+  .profile-info{padding-top:.6rem}
+  .pstat{border-right:0;border-bottom:1px solid var(--line)}
+  .pstat:last-child{border-bottom:0}
+}
+
+/* ================= DASBOR ================= */
+.dash-head{margin:.4rem 0 1.4rem}
+.dash-head h1{margin-bottom:.2rem}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.1rem;margin-bottom:1.2rem}
+.stat{display:flex;align-items:center;gap:1rem;padding:1.25rem 1.3rem;transition:transform .3s var(--ease),box-shadow .3s var(--ease)}
+.stat:hover{transform:translateY(-3px);box-shadow:var(--shadow-2)}
+.stat-ic{flex:none;width:50px;height:50px;border-radius:15px;display:grid;place-items:center;background:var(--primary-50);color:var(--primary)}
+.stat-ic svg{width:23px;height:23px}
+.stat strong{display:block;font-size:2rem;line-height:1;letter-spacing:-.035em}
+.stat span:not(.stat-ic){display:block;margin-top:.25rem;color:var(--muted);font-size:.84rem}
+.stat-main{background:linear-gradient(135deg,var(--night),var(--primary));border-color:transparent;color:#fff}
+.stat-main .stat-ic{background:rgba(255,255,255,.18);color:#fff}
+.stat-main span:not(.stat-ic){color:#FFE3E5}
+.dash-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:1.2rem}
+.panel h2{font-size:1.05rem;margin-bottom:1rem}
+.bar-row{display:grid;grid-template-columns:124px 1fr 30px;gap:.8rem;align-items:center;margin-bottom:.8rem;color:var(--ink);font-size:.88rem;border-radius:8px}
+.bar-row:hover{color:var(--ink)}
+.bar-row:hover .bar span{filter:brightness(1.08)}
+.bar-row strong{text-align:right}
+.bar-label{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar{display:block;height:10px;border-radius:999px;background:#F3F4F6;overflow:hidden}
+.bar span{display:block;height:100%;width:var(--w);border-radius:inherit;background:linear-gradient(90deg,var(--primary-600),var(--primary));transform-origin:left;animation:grow 1s var(--ease) both}
+@keyframes grow{from{transform:scaleX(0)}}
+.mini-list{list-style:none;margin:0;padding:0}
+.mini-item{display:flex;align-items:center;gap:.8rem;padding:.7rem 0;border-bottom:1px solid var(--line)}
+.mini-item:last-child{border-bottom:0;padding-bottom:0}
+.mini-item>div{min-width:0}
+.mini-thumb{flex:none;width:58px;height:42px;border-radius:9px;object-fit:cover;background:#F3F4F6}
+.mini-item .t{display:block;font-weight:700;line-height:1.3;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mini-item .t:hover{color:var(--primary)}
+.mini-item small{color:var(--muted)}
+.mini-item .n{margin-left:auto;flex:none;display:inline-flex;align-items:center;gap:.3rem;font-weight:800;color:var(--primary);font-size:.88rem}
+.mini-item .n svg{width:14px;height:14px;fill:currentColor}
+.mini-item .n-muted{color:var(--muted);font-weight:600;font-size:.8rem}
+@media (max-width:420px){.bar-row{grid-template-columns:96px 1fr 26px}}
+
+/* chip tidak melebar di dalam kartu; apresiasi menjadi pil di pojok foto */
+.project .body>.chip{align-self:flex-start}
+.thumb>.like-form,.thumb>.like.is-own{position:absolute;right:.7rem;bottom:.7rem;z-index:3;margin:0}
+.thumb .like{background:rgba(255,255,255,.95);box-shadow:var(--shadow-1);border-color:transparent}
+.thumb .like.is-own{background:rgba(255,255,255,.88)}
+.thumb .like:hover{background:#fff}
+.thumb .like.is-on{background:#fff}
+.avatar-xl{position:relative;z-index:2}
